@@ -35,16 +35,19 @@ class UPIPayment(PaymentStrategy):
     
 class Transaction:
     """
-    Make a transaction
+    Make a transaction using some payment
     """
 
     def __init__(self, payment_strategy: PaymentStrategy) -> None:
         self.strategy = payment_strategy
 
     def checkout(self, amount: float):
-        return self._strategy.pay(amount)
+        return self.strategy.pay(amount)
     
-    def set_strategy(strategy: PaymentStrategy):
+
         
+if __name__=="__main__":
+    transaction = Transaction(UPIPayment())
+    print(transaction.checkout(300))
 
 
