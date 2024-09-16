@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 
 import pandas as pd
-import numpy as np
 
 
 class DataExtraction(ABC):
@@ -49,3 +48,10 @@ class DataExtractor:
         else:
             raise ValueError("Invalid type")
         
+
+if __name__=="__main__":
+    file_path = str(Path(__file__).parent.parent / "archive.zip")
+    # print(type(file_path))
+    data_extractor = DataExtractor()
+    df = data_extractor.extract_data("zip", file_path)
+    print(df.shape)
