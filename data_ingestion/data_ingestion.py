@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 
-class DataExtraction(ABC):
+class DataExtractor(ABC):
     """
     Interface for extracting data
     """
@@ -15,7 +15,7 @@ class DataExtraction(ABC):
         pass
 
 
-class ZipDataExtraction(DataExtraction):
+class ZipDataExtractor(DataExtractor):
     """
     Extracts data from a zipfile
     """
@@ -30,28 +30,31 @@ class ZipDataExtraction(DataExtraction):
         files = os.listdir(extracted_folder_path)
         csv_files = [file for file in files if file.endswith(".csv")]
 
+        if len(csv_files) == 0:
+            raise FileNotFoundError("No CSV file found in the extracted data.")
         if len(csv_files) > 1:
-            raise ValueError("More than one csv file present!!")
-        elif len(csv_files) == 1:
-            csv_file_path = extracted_folder_path / csv_files[0]
-            df = pd.read_csv(csv_file_path)
-            return df
+            raise ValueError("Multiple CSV files found.")
+
+        
+        csv_file_path = extracted_folder_path / csv_files[0]
+        df = pd.read_csv(csv_file_path)
+        return df
         
 
-class DataExtractor:
+class DataExtractionFactory:
     """
     """
-
-    def extract_data(self, type: str, file_path: str):
+    @staticmethod
+    def get_data_extractor(self, file_extension: str) -> DataExtractor:
         if type == "zip":
-            return ZipDataExtraction().extract(file_path)
+            return ZipDataExtractor()
         else:
-            raise ValueError("Invalid type")
+            raise ValueError(f"No extractor available for file extension: {file_extension}")
         
 
 if __name__=="__main__":
     file_path = str(Path(__file__).parent.parent / "archive.zip")
     # print(type(file_path))
-    data_extractor = DataExtractor()
-    df = data_extractor.extract_data("zip", file_path)
+    zipdata_extractor = DataExtractionFactory.get_data_extractor("zip")
+    df = zipdata_extractor.extract(file_path)
     print(df.shape)
