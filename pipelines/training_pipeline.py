@@ -16,4 +16,4 @@ def ml_pipeline():
 
     # handle missing values step
     filled_data = handle_missing_values_step(raw_data)
-    print(filled_data.shape)
+    
