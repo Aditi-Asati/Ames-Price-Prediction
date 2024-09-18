@@ -45,7 +45,7 @@ class DataExtractionFactory:
     """
     """
     @staticmethod
-    def get_data_extractor(self, file_extension: str) -> DataExtractor:
+    def get_data_extractor(file_extension: str) -> DataExtractor:
         if type == "zip":
             return ZipDataExtractor()
         else:
