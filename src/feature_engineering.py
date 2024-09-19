@@ -4,6 +4,8 @@ import logging
 import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 class FeatureEngineeringStrategy(ABC):
     """
     
