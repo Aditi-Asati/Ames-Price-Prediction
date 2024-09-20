@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -37,14 +38,23 @@ class ZScoreOutlierDetectionStrategy(OutlierDetectionStrategy):
     """
     
     """
-    def __init__(self, threshold: Union[int, float] = 3) -> None:
+    def __init__(self, features: list[str] = None, threshold: Union[int, float] = 3) -> None:
         self.threshold = threshold
-
+        self.features = features
 
     def detect_outlier(self, df: pd.DataFrame) -> pd.DataFrame:
-        logging.info(f"Detecting outliers using the Z Score method with threshold: {self.threshold}")
-        zscores = np.abs((df - df.mean())/ df.std())
-        outliers = pd.DataFrame(zscores > self.threshold)
+        outliers = pd.DataFrame(False, index=df.index, columns=df.columns)
+
+        if self.features:
+            logging.info(f"Detecting outliers in columns: {self.features} using the Z Score method with threshold: {self.threshold}")
+            columns_to_detect = self.features
+        else:
+            logging.info(f"Detecting outliers in all numeric features using the Z Score method with threshold: {self.threshold}")
+            columns_to_detect = list(df.select_dtypes(include="number").columns)
+
+        zscores = np.abs((df[columns_to_detect] - df[columns_to_detect].mean()) / df[columns_to_detect].std())
+        outliers[columns_to_detect] = zscores > self.threshold
+
         logging.info("Outliers detected using the Z Score method.")
         return outliers
     
@@ -65,10 +75,10 @@ class OutliersDetector:
         return self._strategy.detect_outlier(df)
 
     def handle_outliers(self, df: pd.DataFrame, method: str = "remove") -> pd.DataFrame:
-        outliers = self.detect_outliers(df)
         if method == "remove":
+            outliers = self.detect_outliers(df)
             logging.info("Removing outliers from the dataset")
-            cleaned_df = df[~(outliers).all(axis=1)]
+            cleaned_df = df[~(outliers).any(axis=1)]
         elif method == "cap":
             logging.info("Capping outliers in the dataset")
             cleaned_df = df.clip(lower=df.quantile(0.01), upper=df.quantile(0.99), axis=0)
@@ -77,6 +87,7 @@ class OutliersDetector:
             return df
         
         logging.info("Outlier handling completed.")
+        logging.info(f"Shape of cleaned df is : {cleaned_df.shape}")
         return cleaned_df
     
 
@@ -97,3 +108,10 @@ class OutliersDetector:
             plt.show()
 
 
+if __name__=="__main__":
+    df = pd.read_csv(Path(__file__).parent.parent / "extracted_data" / "AmesHousing.csv")
+    print(f"Shape of original df: {df.shape}")
+    outlier_detector = OutliersDetector(ZScoreOutlierDetectionStrategy(["SalePrice"], threshold=3))
+    cleaned_df = outlier_detector.handle_outliers(df)
+    print(f"Shape of cleaned df : {cleaned_df.shape}")
+    # print(f"Cleaned df columns: {cleaned_df.columns}")

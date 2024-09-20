@@ -23,8 +23,10 @@ def ml_pipeline():
     # perform feature engineering step
     engineered_data = feature_engineering_step(filled_data, strategy="log", features = ["SalePrice"])
 
-    cleaned_df = outlier_detection_step(engineered_data, strategy = "ZScore", method = "remove", feature = "SalePrice")
+    cleaned_df = outlier_detection_step(engineered_data, strategy = "ZScore", method = "remove", features = ["SalePrice"])
 
-    X = data_splitter_step(cleaned_df, "SalePrice")
+    X_train, X_test, y_train, y_test = data_splitter_step(cleaned_df, "SalePrice")
+
+    
 
     

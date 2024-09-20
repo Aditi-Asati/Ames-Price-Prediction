@@ -6,24 +6,21 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 @step
-def outlier_detection_step(df: pd.DataFrame, strategy: str, method: str = "cap", feature: str = None):
+def outlier_detection_step(df: pd.DataFrame, strategy: str, method: str = "remove", features: list[str] = None):
     if strategy == "ZScore":
-        outlier_detector = OutliersDetector(ZScoreOutlierDetectionStrategy())
+        outlier_detector = OutliersDetector(ZScoreOutlierDetectionStrategy(features=features))
     elif strategy == "IQR":
         outlier_detector = OutliersDetector(IQROutlierDetectionStrategy())
     else:
         logging.error(f"Unexpected outlier detection strategy : {strategy}")
         raise ValueError(f"Unexpected outlier detection strategy : {strategy}")
-    
-    if feature is None: 
-        df_numeric = df.select_dtypes(include="number")
-        cleaned_df = outlier_detector.handle_outliers(df_numeric, method)
 
-    elif feature in df.columns:
-        cleaned_df = outlier_detector.handle_outliers(df[feature], method)
-        
+    if all([feature in df.columns for feature in features]):
+        cleaned_df = outlier_detector.handle_outliers(df=df, method=method)
+
     else:
-        logging.error(f"Column {feature} does not exist in the dataframe.")
-        raise ValueError(f"Column {feature} does not exist in the dataframe.")
+        logging.error(f"Column {features} does not exist in the dataframe.")
+        raise ValueError(f"Column {features} does not exist in the dataframe.")
     
+    logging.info(f"Shape of cleaned df is : {cleaned_df.shape}")
     return cleaned_df
