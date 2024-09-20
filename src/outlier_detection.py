@@ -44,7 +44,7 @@ class ZScoreOutlierDetectionStrategy(OutlierDetectionStrategy):
     def detect_outlier(self, df: pd.DataFrame) -> pd.DataFrame:
         logging.info(f"Detecting outliers using the Z Score method with threshold: {self.threshold}")
         zscores = np.abs((df - df.mean())/ df.std())
-        outliers = pd.DataFrame(zscores > self.threshold, columns=df.columns)
+        outliers = pd.DataFrame(zscores > self.threshold)
         logging.info("Outliers detected using the Z Score method.")
         return outliers
     

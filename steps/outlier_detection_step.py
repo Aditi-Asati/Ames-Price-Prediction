@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 @step
-def outlier_detection_step(df: pd.DataFrame, strategy: OutlierDetectionStrategy, method: str = "cap", feature: str = None):
+def outlier_detection_step(df: pd.DataFrame, strategy: str, method: str = "cap", feature: str = None):
     if strategy == "ZScore":
         outlier_detector = OutliersDetector(ZScoreOutlierDetectionStrategy())
     elif strategy == "IQR":
