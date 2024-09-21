@@ -4,6 +4,7 @@ from steps.feature_engineering_step import feature_engineering_step
 from steps.outlier_detection_step import outlier_detection_step
 from steps.data_splitter_step import data_splitter_step
 from steps.model_building_step import model_building_step
+from steps.model_evaluation_step import model_evaluation_step
 from zenml import Model, pipeline, step
 from pathlib import Path
 
@@ -31,9 +32,16 @@ def ml_pipeline():
     X_train, X_test, y_train, y_test = data_splitter_step(cleaned_df, "SalePrice")
 
     # Model building step
-    model = model_building_step(X_train=X_train, y_train=y_train)
+    trained_pipeline = model_building_step(X_train=X_train, y_train=y_train)
 
     # Model evaluation step
-    evaluation_metrics, mse = model_evaluation_step()
+    evaluation_metrics, mse = model_evaluation_step(trained_pipeline=trained_pipeline, X_test=X_test, y_test=y_test)
+
+    return trained_pipeline
+
+
+if __name__=="__main__":
+    
+    run = ml_pipeline()
 
     
