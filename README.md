@@ -18,7 +18,7 @@
 
 ## Introduction
 
-This project aims to predict housing prices in Ames, Iowa using a machine learning regression model. The dataset includes detailed features on residential properties, allowing for accurate price predictions. The project incorporates extensive data preprocessing, feature engineering, exploratory data analysis (EDA), outlier detection, and multicollinearity analysis. A complete training pipeline is built using ZenML, applying Strategy and Template design patterns to enhance modularity and scalability. Python and Scikit-learn are used for core model development.
+This project aims to predict housing prices in Ames, Iowa using a machine learning regression model. The dataset includes detailed features on residential properties, allowing for accurate price predictions. The project incorporates extensive data preprocessing, feature engineering, exploratory data analysis (EDA), outlier detection. A complete training pipeline is built using ZenML, applying Strategy and Template design patterns to enhance modularity and scalability. Python and Scikit-learn are used for core model development.
 
 <!-- ## Project Demo
 Here is a demonstration of Hazelnut in action:
@@ -31,8 +31,8 @@ Here is a demonstration of Hazelnut in action:
 Feature Engineering: Generates meaningful features from the dataset.
 - **EDA and Visualization**: In-depth exploration of key features and correlations.
 Outlier Detection: Identifies and handles outliers for more accurate predictions.
-<!-- - **Multicollinearity Analysis**: Detects correlated features to prevent model instability. -->
 - **Training Pipeline**: Built using ZenML for automated and reusable workflows.
+<!-- - **Multicollinearity Analysis**: Detects correlated features to prevent model instability. -->
 
 ## Installation
 
