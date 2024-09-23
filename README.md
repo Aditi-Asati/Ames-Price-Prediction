@@ -31,7 +31,7 @@ Here is a demonstration of Hazelnut in action:
 Feature Engineering: Generates meaningful features from the dataset.
 - **EDA and Visualization**: In-depth exploration of key features and correlations.
 Outlier Detection: Identifies and handles outliers for more accurate predictions.
-- **Multicollinearity Analysis**: Detects correlated features to prevent model instability.
+<!-- - **Multicollinearity Analysis**: Detects correlated features to prevent model instability. -->
 - **Training Pipeline**: Built using ZenML for automated and reusable workflows.
 
 ## Installation
