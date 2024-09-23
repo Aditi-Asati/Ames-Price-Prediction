@@ -17,7 +17,7 @@ experiment_tracker = Client().active_stack.experiment_tracker
 model = Model(
     name="ames_price_predictor",
     version=None,
-    license="Apache 2.0",
+    license="MIT",
     description="Price prediction model for houses.",
 )
 
